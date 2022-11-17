@@ -5,6 +5,15 @@ commands:
     steps:
       - run: echo ${CIRCLE_WORKFLOW_ID}
 jobs:
+  fail_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: return 1
+      - run:
+      name: Upload Failed Tests
+      command: echo "Hello Error!"
+      when: on_fail
 
   my_job:
     docker:
@@ -32,6 +41,7 @@ jobs:
 workflows:
   my_workflow:
     jobs:
+      - fail_job
       - my_job
       - save_hello_world_output
       - print_output_file:
